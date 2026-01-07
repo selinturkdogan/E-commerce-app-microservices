@@ -24,9 +24,34 @@ Libraries: Spring Data JPA, Pika, Psycopg2, Lombok
 
 Starting the System
 
-
 Start the Infrastructure:
 docker-compose up -d
+
+
+Database Setup and Table Creation
+For the system to work, the products table must be manually created on the PostgreSQL side. Follow these steps:
+
+Connect to the Docker PostgreSQL Container:
+
+docker exec -it db-products psql -U user -d products_db
+
+Run the following SQL Commands:
+
+-- Create the products table
+CREATE TABLE products (
+id SERIAL PRIMARY KEY,
+name VARCHAR(100),
+stock INT DEFAULT 100
+);
+
+-- Add a sample product for testing (id: 10)
+INSERT INTO products (id, name, stock) VALUES (10, 'Test Keyboard', 100);
+
+To Check:
+SELECT * FROM products;
+(You can type \q to exit.)
+----------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 Order Service (Java):
@@ -37,7 +62,6 @@ mvn spring-boot:run
 Product Service (Python):
 cd product-service
 python consumer.py
-
 
 Testing (PowerShell / Terminal)
 To test the system, an order can be sent with the following command:
