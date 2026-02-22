@@ -1,8 +1,10 @@
 # ShopHub - E-Commerce Microservices Platform
 
-Modern bir mikroservis mimarisi ile oluşturulmuş tam özellikli e-ticaret platformu.
+A fully-featured, scalable e-commerce platform developed using a modern microservices architecture.
 
-## 🏗 Mimari
+This project demonstrates service isolation, API Gateway usage, container orchestration, and event-driven communication principles in a real system.
+
+## 🏗 System Architecture
 
 ```
 ┌──────────────────┐
@@ -39,9 +41,9 @@ Modern bir mikroservis mimarisi ile oluşturulmuş tam özellikli e-ticaret plat
           └──────────┘
 ```
 
-## 🛠 Teknolojiler
+## 🛠 Technologies
 
-| Servis | Teknoloji | Port |
+| Service | Technologie | Port |
 |--------|-----------|------|
 | Frontend | React + Vite + TypeScript | 5173 |
 | API Gateway | Node.js + Express | 9000 |
@@ -51,111 +53,149 @@ Modern bir mikroservis mimarisi ile oluşturulmuş tam özellikli e-ticaret plat
 | Message Broker | RabbitMQ | 5672, 15672 |
 | Search Engine | Elasticsearch | 9200 |
 
-## 🚀 Başlangıç
+🎯 Project Purpose
 
-### 1. Docker ile Tüm Servisleri Başlat
+Use microservices architecture instead of a monolithic structure
+
+Make services independently deployable
+
+Provide centralized routing via API Gateway
+
+Run the entire system with a single command using Docker Compose
+
+Demonstrate RESTful services and event-driven communication (RabbitMQ) integration
+
+## 🚀 Installation & Running
+
+### 1. Start All Services with Docker
 ```bash
 docker-compose up -d --build
 ```
 
-### 2. Veritabanlarını Seed Et
+### 2. Seed the Databases
 ```bash
-# Ürünleri ekle
+# # Add products
 docker-compose exec -T product-service python seed_products.py
 
-# Ürün görsellerini ekle
+# Add product images
 docker-compose exec -T product-service python update_images.py
 ```
 
-### 3. Frontend'i Başlat
+### 3. Start the Frontend
 ```bash
 cd e-commerce-frontend
 npm install
 npm run dev
 ```
 
-### 4. Tarayıcıda Aç
+### 4. Open in Browser
 - Frontend: http://localhost:5173
 - RabbitMQ Dashboard: http://localhost:15672 (guest/guest)
 
-## 📁 Proje Yapısı
+## 📁 Project Structure
 
 ```
 proje/
 ├── api-gateway/         # Express.js API Gateway
-├── user-service/        # Node.js kullanıcı servisi (MongoDB)
-├── product-service/     # Flask ürün servisi (PostgreSQL)
-├── order-service/       # Spring Boot sipariş servisi (MySQL)
+├── user-service/        # Node.js user service (MongoDB)
+├── product-service/     # Flask product service (PostgreSQL)
+├── order-service/       # Spring Boot order service (MySQL)
 ├── e-commerce-frontend/ # React frontend
-├── e-commerce-backend/  # (Kullanılmayan FastAPI alternatifi)
-├── docker-compose.yml   # Tüm servislerin orchestration'ı
+├── docker-compose.yml   # Service orchestration
 └── README.md
 ```
 
 ## 🔗 API Endpoints
 
 ### User Service (`/api/users`)
-| Method | Endpoint | Açıklama |
+| Method | Endpoint | Description |
 |--------|----------|----------|
-| POST | /register | Yeni kullanıcı kaydı |
-| POST | /login | Kullanıcı girişi (JWT) |
+| POST | /register | Register new user |
+| POST | /login | User login with JWT |
 
 ### Product Service (`/api/products`)
-| Method | Endpoint | Açıklama |
+| Method | Endpoint | Description |
 |--------|----------|----------|
-| GET | / | Tüm ürünleri listele |
-| GET | /?q=laptop | Ürün ara |
-| POST | / | Yeni ürün ekle |
+| GET | / | List all products |
+| GET | /?q=laptop | Search product |
+| POST | / | Add new product |
 
 ### Order Service (`/api/orders`)
-| Method | Endpoint | Açıklama |
+| Method | Endpoint | Description|
 |--------|----------|----------|
-| GET | / | Tüm siparişler |
-| GET | /{id} | Sipariş detayı |
-| GET | /user/{userId} | Kullanıcı siparişleri |
-| POST | / | Yeni sipariş |
-| PUT | /{id} | Sipariş güncelle |
-| DELETE | /{id} | Sipariş iptal |
+| GET | / | List all orders |
+| GET | /{id} | Order detail |
+| GET | /user/{userId} | Orders of a specific user |
+| POST | / | Create new order |
+| PUT | /{id} | Update ordere |
+| DELETE | /{id} | Cancel order |
 
 ## 🧪 Test
 
 ```bash
-# Ürünleri test et
+# List Products
 curl http://localhost:9000/api/products
 
-# Kullanıcı kaydı
+# Register User
 curl -X POST http://localhost:9000/api/users/register \
   -H "Content-Type: application/json" \
   -d '{"username": "test@test.com", "password": "123456"}'
 
-# Sipariş oluştur
+# Create Order
 curl -X POST http://localhost:8080/api/orders \
   -H "Content-Type: application/json" \
   -d '{"userId": "user1", "productId": "1", "quantity": 2, "totalPrice": 100}'
 ```
 
-## 📊 Özellikler
+## 📊 Features
 
-- ✅ Kullanıcı kayıt ve giriş (JWT)
-- ✅ 20 ürün ile ürün listeleme
-- ✅ Gerçek ürün görselleri
-- ✅ Arama ve filtreleme
-- ✅ Sipariş oluşturma (RabbitMQ ile stok güncelleme)
-- ✅ Responsive tasarım
-- ✅ Sepet işlemleri
+User registration & login with JWT
 
-## 🐳 Docker Servisleri
+✅ 20 preloaded products (seed data)
+
+✅ Real product images
+
+✅ Elasticsearch-powered search
+
+✅ Order creation
+
+✅ Event-driven stock update via RabbitMQ
+
+✅ Responsive design
+
+✅ Shopping cart operations
+
+✅ Microservice isolation
+
+✅ API Gateway routing
+
+## 🐳 Docker Commands
 
 ```bash
-# Durumu kontrol et
+# Check running services
 docker-compose ps
 
-# Logları gör
+# View logs
 docker-compose logs -f [servis-adı]
 
-# Yeniden başlat
+# Restart service
 docker-compose restart [servis-adı]
 
-# Durdur
+# Stop entire system
 docker-compose down
 ```
+🏛 Architectural Characteristics
+
+Loose Coupling
+
+Service Isolation
+
+RESTful API Communication
+
+Event-Driven Architecture (RabbitMQ)
+
+Independent Databases per Service
+
+Centralized API Gateway
+
+Containerized Deployment
